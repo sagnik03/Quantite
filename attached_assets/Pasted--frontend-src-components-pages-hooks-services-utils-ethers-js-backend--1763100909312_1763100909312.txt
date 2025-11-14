@@ -1,0 +1,146 @@
+/frontend
+  /src
+    /components
+    /pages
+    /hooks
+    /services
+    /utils/ethers.js
+/backend
+  /src
+    /controllers
+    /models
+    /middleware
+    /routes
+README.md
+
+🔑 Environment Variables
+
+Create a .env file for both frontend & backend or use Replit Secrets.
+Backend .env
+
+MONGO_URI=<your MongoDB connection string>
+JWT_SECRET=<secure JWT secret>
+IPFS_GATEWAY=https://dweb.link/ipfs/
+WEB3STORAGE_TOKEN=<optional: if backend controls uploads>
+NODE_ENV=development
+
+Frontend .env
+
+VITE_BACKEND_URL=<your-backend-url>
+VITE_WEB3STORAGE_TOKEN=<token-if-using-client-side-upload>
+
+🚦 Installation & Setup
+1️⃣ Clone the repo
+
+git clone <repo-url>
+
+2️⃣ Install backend dependencies
+
+cd backend
+npm install
+npm run dev
+
+3️⃣ Install frontend dependencies
+
+cd frontend
+npm install
+npm run dev
+
+🔐 Authentication Flow (How MetaMask Login Works)
+
+    User clicks Connect Wallet in React frontend.
+
+    Frontend requests a nonce from:
+    POST /api/auth/nonce
+
+    MetaMask signs the nonce (signMessage via ethers.js).
+
+    Frontend sends signed message to backend:
+    POST /api/auth/verify
+
+    Backend verifies signature & issues JWT.
+
+    All protected routes require Authorization: Bearer <jwt>.
+
+📁 File Upload Flow (IPFS)
+Option A — Client-Side Upload (Recommended)
+
+    User uploads file in dashboard.
+
+    React app uploads file directly to IPFS using Web3.Storage.
+
+    Web3.Storage returns a CID.
+
+    React sends POST /api/files/create to backend with:
+
+    cid, filename, size, metadata
+
+    File record saved in MongoDB.
+
+Option B — Backend Upload (Less preferred)
+
+    React sends file to Express.
+
+    Express uploads to IPFS using Web3.Storage token.
+
+    CID saved to MongoDB.
+
+🧪 API Endpoints
+Auth
+
+    POST /api/auth/nonce
+
+    POST /api/auth/verify
+
+User
+
+    GET /api/user/me
+
+    GET /api/files
+
+    POST /api/files/create
+
+    GET /api/files/:cid
+
+    DELETE /api/files/:cid
+
+Admin
+
+    GET /api/admin/files
+
+    GET /api/admin/audit
+
+👮 Admin Access
+
+Admins must also log in with MetaMask.
+Admin wallets are stored in MongoDB:
+
+isAdmin: true
+
+🛡️ Security Features
+
+    Nonce expires after single use.
+
+    JWT with short expiration.
+
+    CORS protection for backend.
+
+    Rate limiting on auth routes.
+
+    Optional client-side file encryption.
+
+📌 Future Phases (Company Roadmap)
+
+    Phase 2: Admin Control Panel UI & analytics
+
+    Phase 3: Sales listing platform for user-contributed data
+
+    Phase 4: On-chain data ownership or tokenization (optional)
+
+📞 Contact
+
+For project details or clarification:
+📧 tushar.joshi@quantight.com
+🏁 Status
+
+This repository contains the full scaffold and implementation plan for Phase 1 — User Dashboard.
