@@ -23,7 +23,7 @@ export async function uploadToIPFS(fileBuffer: Buffer, filename: string): Promis
       type: "application/octet-stream"
     });
     
-    const result = await client.upload.file(file, "public");
+    const result = await client.upload.public.file(file);
 
     console.log(`File uploaded to IPFS with CID: ${result.cid}`);
     return result.cid;

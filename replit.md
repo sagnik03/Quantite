@@ -6,7 +6,7 @@ A decentralized file storage platform with MetaMask authentication and IPFS inte
 
 This application implements Phase 1 of a Web3-powered data analysis platform, featuring:
 - MetaMask wallet authentication with nonce-based challenge/response signing
-- Decentralized file storage on IPFS via Web3.Storage
+- Decentralized file storage on IPFS via Pinata
 - User dashboard for managing uploaded files
 - Admin panel for viewing all user files and audit logs
 - JWT-based secure session management
@@ -28,7 +28,7 @@ This application implements Phase 1 of a Web3-powered data analysis platform, fe
 - **JWT** (jsonwebtoken) for authentication tokens
 - **ethers.js** for server-side signature verification
 - **Multer** for file upload handling
-- **Web3.Storage** for IPFS uploads
+- **Pinata** for IPFS uploads
 - **In-memory storage** (MemStorage) for user data, files, and audit logs
 
 ## Architecture
@@ -75,8 +75,8 @@ This application implements Phase 1 of a Web3-powered data analysis platform, fe
 1. User drags/drops file or selects via file picker
 2. Frontend creates multipart form data
 3. File uploads to backend `/api/files/upload`
-4. Backend uploads file to Web3.Storage IPFS
-5. Web3.Storage returns CID
+4. Backend uploads file to Pinata IPFS
+5. Pinata returns CID
 6. Backend stores file metadata with CID
 7. Audit log created for upload action
 8. Frontend refreshes file list
@@ -99,9 +99,25 @@ This application implements Phase 1 of a Web3-powered data analysis platform, fe
 ## Environment Variables
 
 Required secrets (configured via Replit Secrets):
-- `WEB3STORAGE_TOKEN` - Web3.Storage API token for IPFS uploads
+- `PINATA_JWT` - Pinata JWT token for IPFS uploads
 - `SESSION_SECRET` - Session secret (auto-generated)
 - `JWT_SECRET` - Optional custom JWT secret (defaults to env-specific value)
+
+### Migration from NFT.Storage to Pinata (November 2024)
+
+The application was originally built with NFT.Storage, which shut down on June 30, 2024. We migrated to **Pinata** as the official recommended partner for IPFS storage.
+
+**How to get your Pinata JWT:**
+1. Sign up at https://pinata.cloud (free plan available)
+2. Navigate to API Keys → New Key
+3. Toggle "Admin" permissions (or select specific permissions)
+4. Copy the JWT token (shown only once!)
+5. Add to Replit Secrets as `PINATA_JWT`
+
+**Pinata Free Plan includes:**
+- 1 GB storage
+- Unlimited bandwidth
+- All essential IPFS features
 
 ## Features Implemented
 
@@ -110,7 +126,7 @@ Required secrets (configured via Replit Secrets):
 - [x] Nonce-based challenge/response signing
 - [x] Signature verification using ethers.js
 - [x] JWT token-based sessions
-- [x] Client-side IPFS file upload via Web3.Storage
+- [x] Server-side IPFS file upload via Pinata
 - [x] File metadata storage with CID indexing
 - [x] User dashboard with file listing
 - [x] Drag-and-drop file upload interface
